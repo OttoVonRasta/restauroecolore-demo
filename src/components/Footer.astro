@@ -1,0 +1,177 @@
+---
+import { azienda, filiali, menuAzienda } from '../data/sito';
+import { servizi } from '../data/servizi';
+---
+
+<footer class="piede">
+  <div class="contenitore piede__griglia">
+    <div>
+      <p class="piede__marchio">{azienda.nome}</p>
+      <address>
+        {azienda.ragioneSociale}<br />
+        {azienda.indirizzo}<br />
+        {azienda.localita}
+      </address>
+      <p>
+        Tel. <a href={`tel:${azienda.telefonoLink}`}>{azienda.telefono}</a><br />
+        <a href={`mailto:${azienda.email}`}>{azienda.email}</a>
+      </p>
+      <p class="piede__social">
+        <a href={azienda.facebook} rel="noopener">Facebook</a>
+        <a href={azienda.instagram} rel="noopener">Instagram</a>
+      </p>
+    </div>
+
+    <nav aria-label="Servizi">
+      <h2>Servizi</h2>
+      <ul role="list">
+        {
+          servizi.map((s) => (
+            <li>
+              <a href={`/servizi/${s.slug}/`}>{s.titolo}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <nav aria-label="Azienda">
+      <h2>Azienda</h2>
+      <ul role="list">
+        {
+          menuAzienda.map((v) => (
+            <li>
+              <a href={v.href}>{v.titolo}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div>
+      <h2>Filiali</h2>
+      <ul role="list" class="piede__filiali">
+        {
+          filiali.map((f) => (
+            <li>
+              <strong>{f.nome}</strong>
+              <br />
+              {f.indirizzo}
+              {f.telefono && (
+                <>
+                  <br />
+                  Tel. {f.telefono}
+                </>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="contenitore piede__fondo">
+    <p>
+      © {new Date().getFullYear()}
+      {azienda.ragioneSociale} · P.IVA {azienda.piva} · {azienda.registroImprese} · {azienda.capitaleSociale}
+    </p>
+    <p>
+      <a href="/privacy-policy/">Privacy Policy</a>
+      <a href="/cookie-policy/">Cookie Policy</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .piede {
+    padding-top: clamp(3.5rem, 7vw, 5.5rem);
+    font-size: 0.95rem;
+    color: #b9c4c0;
+    background: var(--inchiostro);
+  }
+
+  .piede__griglia {
+    display: grid;
+    grid-template-columns: 1.3fr 1.2fr 1fr 1.2fr;
+    gap: 2.5rem;
+  }
+
+  .piede__marchio {
+    margin-bottom: 1rem;
+    font-family: var(--titoli);
+    font-size: 1.6rem;
+    font-weight: 560;
+    line-height: 1.1;
+    color: #fff;
+  }
+
+  address {
+    margin-bottom: 1em;
+    font-style: normal;
+  }
+
+  h2 {
+    margin-bottom: 1rem;
+    font-family: var(--corpo);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  li {
+    margin-bottom: 0.45rem;
+  }
+
+  .piede__filiali li {
+    margin-bottom: 1rem;
+  }
+
+  .piede__filiali strong {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
+
+  .piede__social,
+  .piede__fondo p:last-child {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .piede__fondo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding-block: 1.5rem;
+    font-size: 0.85rem;
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+  }
+
+  .piede__fondo p {
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    .piede__griglia {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .piede__griglia {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

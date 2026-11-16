@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.astro/
+.vercel/
+
+# Archivio del vecchio sito: si tengono testi e indici, non i file pesanti
+# (le foto ridotte usate dal sito sono in src/assets/media).
+sito-originale/media/
+sito-originale/html/
+sito-originale/api/

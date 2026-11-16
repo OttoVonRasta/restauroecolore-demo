@@ -1,0 +1,751 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { azienda, clienti } from '../data/sito';
+import { servizi } from '../data/servizi';
+import { foto } from '../lib/foto';
+
+const numeri = [
+  {
+    valore: String(azienda.anniAttivita),
+    unita: 'anni',
+    testo: `Dal ${azienda.annoFondazione} tra le maggiori realtà del Nordest`,
+    href: '/azienda/',
+  },
+  { valore: '1000', unita: '+', testo: 'Oltre mille cantieri di esperienza', href: '/realizzazioni/' },
+  { valore: '10', unita: 'anni', testo: 'Lavori garantiti fino a 10 anni', href: '/azienda/garanzie/' },
+];
+
+const realizzazioni = [
+  {
+    nome: 'Condominio',
+    luogo: 'Albignasego PD',
+    foto: '2018/03/albignasego-web.jpg',
+    lavori: 'Restauro e dipintura facciate esterne, ripristino intonaco e CLS, rifacimento pavimenti e poggioli',
+  },
+  {
+    nome: 'Condominio Iris',
+    luogo: 'Marghera VE',
+    foto: '2018/03/030-web.jpg',
+    lavori: 'Ripristino e dipintura generale esterna, nuovi pavimenti poggioli, sostituzione delle lattonerie',
+  },
+  {
+    nome: 'Condominio Manin',
+    luogo: 'Mestre VE',
+    foto: '2018/03/004-web.jpg',
+    lavori: 'Risanamento e dipintura facciate esterne',
+  },
+];
+---
+
+<Base>
+  <section class="eroe">
+    <div class="contenitore eroe__griglia">
+      <div class="eroe__testo">
+        <p class="occhiello">Restauri conservativi di immobili</p>
+        <h1>Rinnoviamo il valore degli edifici, nel tempo.</h1>
+        <p class="eroe__sommario">
+          Dal {azienda.annoFondazione} restauriamo e riqualifichiamo immobili in tutto il Nordest: oltre 1000 cantieri d’esperienza,
+          attestazione SOA e lavori garantiti fino a 10 anni.
+        </p>
+        <div class="eroe__azioni">
+          <a class="bottone" href="/contattaci/">Contattaci</a>
+          <a class="bottone bottone--contorno" href="/realizzazioni/">Guarda le realizzazioni</a>
+        </div>
+        <p class="eroe__attestati">
+          <a href="/azienda/certificazione-soa/">Attestazione SOA</a>
+          <a href="/azienda/certificato-iso-9001/">Certificato ISO 9001</a>
+        </p>
+      </div>
+      <div class="eroe__foto">
+        <Image
+          class="eroe__grande"
+          src={foto('2018/03/098-web.jpg')}
+          alt="Facciate restaurate di un condominio a Mestre"
+          widths={[640, 960, 1400]}
+          sizes="(max-width: 900px) 100vw, 640px"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <Image
+          class="eroe__piccola"
+          src={foto('2016/10/006.jpg')}
+          alt="Operaio Restauro & Colore al lavoro in cantiere"
+          widths={[320, 560]}
+          sizes="280px"
+          loading="eager"
+        />
+        <p class="eroe__targa">
+          <strong>{azienda.anniAttivita}</strong> anni<br />di cantieri
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="numeri" aria-label="L'azienda in numeri">
+    <ul role="list" class="contenitore numeri__griglia">
+      {
+        numeri.map((n) => (
+          <li>
+            <a href={n.href}>
+              <span class="numeri__valore">
+                {n.valore}
+                <small>{n.unita}</small>
+              </span>
+              <span class="numeri__testo">{n.testo}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="sezione">
+    <div class="contenitore azienda">
+      <Image
+        class="azienda__foto"
+        src={foto('2013/04/IMG_0517modificato.jpg')}
+        alt="I furgoni di Restauro & Colore pronti a partire per i cantieri"
+        widths={[480, 800, 1200]}
+        sizes="(max-width: 900px) 100vw, 520px"
+      />
+      <div>
+        <p class="occhiello">L’azienda</p>
+        <h2>Dalla piccola abitazione alle grandi strutture</h2>
+        <p class="azienda__sommario">
+          {azienda.nome} nasce nel {azienda.annoFondazione} e, con oltre 1000 cantieri d’esperienza e certificazione SOA, si colloca
+          a pieno titolo tra le maggiori realtà del Nordest nel campo dei restauri conservativi di immobili.
+        </p>
+        <p>
+          Utilizzando manodopera specializzata, siamo in grado di fornire servizi plurisettoriali altamente qualificati. Da sempre
+          collaboriamo con Enti pubblici e privati e ci interfacciamo regolarmente con gli studi di amministrazioni condominiali.
+        </p>
+        <p>
+          La nostra azienda offre una presenza dinamica sul territorio attraverso le filiali di Mestre, Marghera, Jesolo, Breganze
+          e la nostra sede amministrativa di Santa Giustina in Colle.
+        </p>
+        <a class="freccia" href="/azienda/">Scopri l’azienda</a>
+      </div>
+    </div>
+    <div class="contenitore clienti">
+      <p>Ci hanno concesso la loro fiducia</p>
+      <ul role="list">
+        {clienti.map((c) => <li>{c}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sezione servizi">
+    <div class="contenitore">
+      <div class="intestazione">
+        <div>
+          <p class="occhiello">Servizi</p>
+          <h2>Per rinnovare un valore nel tempo</h2>
+        </div>
+        <a class="freccia" href="/servizi/">Tutti i servizi</a>
+      </div>
+      <ul role="list" class="servizi__griglia">
+        {
+          servizi.map((s) => (
+            <li>
+              <a class="scheda" href={`/servizi/${s.slug}/`}>
+                <div class="scheda__foto">
+                  <Image src={foto(s.foto)} alt={s.alt} widths={[400, 640]} sizes="(max-width: 600px) 100vw, 300px" />
+                </div>
+                <h3>{s.titolo}</h3>
+                {s.voci.length > 0 && <p>{s.voci.join(' · ')}</p>}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a class="scheda scheda--invito" href="/contattaci/">
+            <h3>Hai un lavoro da fare?</h3>
+            <p>Raccontaci il tuo immobile: ti rispondiamo noi.</p>
+            <span class="freccia">Contattaci</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sezione realizzazioni">
+    <div class="contenitore">
+      <div class="intestazione">
+        <div>
+          <p class="occhiello">Realizzazioni</p>
+          <h2>Alcuni dei nostri cantieri</h2>
+        </div>
+        <a class="freccia" href="/realizzazioni/">Tutte le realizzazioni</a>
+      </div>
+      <ul role="list" class="realizzazioni__griglia">
+        {
+          realizzazioni.map((r) => (
+            <li>
+              <a href="/realizzazioni/">
+                <Image
+                  src={foto(r.foto)}
+                  alt={`${r.nome}, ${r.luogo}: facciate dopo l'intervento`}
+                  widths={[480, 800]}
+                  sizes="(max-width: 900px) 100vw, 380px"
+                />
+                <div class="realizzazioni__testo">
+                  <p class="realizzazioni__luogo">{r.luogo}</p>
+                  <h3>{r.nome}</h3>
+                  <p>{r.lavori}</p>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="sezione">
+    <div class="contenitore primadopo">
+      <div>
+        <p class="occhiello">Prima e dopo</p>
+        <h2>Il risultato si vede a confronto</h2>
+        <p>Alcuni esempi delle lavorazioni eseguite, con il confronto della situazione prima e dopo l’intervento.</p>
+        <a class="freccia" href="/prima-e-dopo/">Guarda i confronti</a>
+      </div>
+      <div class="primadopo__coppia">
+        <figure>
+          <Image
+            src={foto('2016/11/prima.jpg')}
+            alt="Interno di un appartamento prima della ristrutturazione"
+            widths={[400, 700]}
+            sizes="(max-width: 900px) 50vw, 340px"
+          />
+          <figcaption>Prima</figcaption>
+        </figure>
+        <figure>
+          <Image
+            src={foto('2016/11/dopo.jpg')}
+            alt="Lo stesso appartamento dopo la ristrutturazione"
+            widths={[400, 700]}
+            sizes="(max-width: 900px) 50vw, 340px"
+          />
+          <figcaption class="primadopo__dopo">Dopo</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="contatti">
+    <div class="contenitore contatti__griglia">
+      <div>
+        <p class="occhiello">Contatti</p>
+        <h2>Parliamo del tuo immobile</h2>
+        <div class="contatti__azioni">
+          <a class="bottone bottone--chiaro" href={`tel:${azienda.telefonoLink}`}>Chiama {azienda.telefono}</a>
+          <a class="bottone bottone--trasparente" href="/contattaci/">Scrivici</a>
+        </div>
+      </div>
+      <dl>
+        <div>
+          <dt>Sede</dt>
+          <dd>
+            {azienda.ragioneSociale}<br />
+            {azienda.indirizzo}<br />
+            {azienda.localita}
+          </dd>
+        </div>
+        <div>
+          <dt>Recapiti</dt>
+          <dd>
+            Tel. <a href={`tel:${azienda.telefonoLink}`}>{azienda.telefono}</a><br />
+            Fax {azienda.fax}<br />
+            <a href={`mailto:${azienda.email}`}>{azienda.email}</a>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intestazione {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-bottom: clamp(2rem, 4vw, 3.25rem);
+  }
+
+  /* Apertura */
+  .eroe {
+    overflow: hidden;
+    background: var(--carta);
+  }
+
+  .eroe__griglia {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+    padding-block: clamp(3rem, 6vw, 5.5rem);
+  }
+
+  .eroe__sommario {
+    max-width: 34rem;
+    margin-block: 1.5rem 2rem;
+    font-size: 1.2rem;
+    line-height: 1.55;
+  }
+
+  .eroe__azioni {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .eroe__attestati {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin: 2.25rem 0 0;
+    padding-top: 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--tenue);
+    border-top: 1px solid var(--linea);
+  }
+
+  .eroe__attestati a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+
+  .eroe__attestati a::before {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--verde);
+  }
+
+  .eroe__attestati a:hover {
+    color: var(--verde);
+  }
+
+  .eroe__foto {
+    position: relative;
+    padding: 0 0 3rem 3.5rem;
+  }
+
+  .eroe__grande {
+    width: 100%;
+    aspect-ratio: 5 / 4;
+    object-fit: cover;
+    border-radius: var(--raggio);
+  }
+
+  .eroe__piccola {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 42%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border: 6px solid var(--carta);
+    border-radius: var(--raggio);
+    box-shadow: var(--ombra);
+  }
+
+  .eroe__targa {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    margin: 0;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 650;
+    line-height: 1.25;
+    color: var(--inchiostro);
+    background: var(--carta);
+    border-radius: 12px;
+    box-shadow: var(--ombra);
+  }
+
+  .eroe__targa strong {
+    font-family: var(--titoli);
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--verde);
+  }
+
+  /* Numeri */
+  .numeri {
+    background: var(--carta);
+    border-block: 1px solid var(--linea);
+  }
+
+  .numeri__griglia {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .numeri li + li {
+    border-left: 1px solid var(--linea);
+  }
+
+  .numeri a {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    height: 100%;
+    padding: 1.75rem clamp(1rem, 2.5vw, 2.25rem);
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+
+  .numeri li:first-child a {
+    padding-left: 0;
+  }
+
+  .numeri a:hover .numeri__testo {
+    color: var(--verde);
+  }
+
+  .numeri__valore {
+    font-family: var(--titoli);
+    font-size: clamp(2.6rem, 4.5vw, 3.6rem);
+    font-weight: 560;
+    line-height: 1;
+    color: var(--verde);
+    white-space: nowrap;
+  }
+
+  .numeri__valore small {
+    margin-left: 0.15em;
+    font-size: 0.4em;
+    color: var(--ocra);
+  }
+
+  .numeri__testo {
+    max-width: 13rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--inchiostro);
+    transition: color 0.2s;
+  }
+
+  /* Azienda */
+  .azienda {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(2rem, 6vw, 5.5rem);
+    align-items: center;
+  }
+
+  .azienda__foto {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--raggio);
+  }
+
+  .azienda h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  .azienda__sommario {
+    font-size: 1.2rem;
+    line-height: 1.55;
+    color: var(--inchiostro);
+  }
+
+  .clienti {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.75rem 2.5rem;
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--linea);
+  }
+
+  .clienti p {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tenue);
+  }
+
+  .clienti ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2.25rem;
+    font-family: var(--titoli);
+    font-size: 1.2rem;
+    color: var(--inchiostro);
+  }
+
+  /* Servizi */
+  .servizi {
+    background: var(--carta);
+    border-block: 1px solid var(--linea);
+  }
+
+  .servizi__griglia {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+    gap: 2.25rem 1.75rem;
+  }
+
+  .scheda {
+    display: block;
+    height: 100%;
+    text-decoration: none;
+  }
+
+  .scheda__foto {
+    overflow: hidden;
+    margin-bottom: 1rem;
+    border-radius: var(--raggio);
+  }
+
+  .scheda__foto img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+
+  .scheda:hover .scheda__foto img {
+    transform: scale(1.05);
+  }
+
+  .scheda h3 {
+    transition: color 0.2s;
+  }
+
+  .scheda:hover h3 {
+    color: var(--verde);
+  }
+
+  .scheda p {
+    margin: 0.4rem 0 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--tenue);
+  }
+
+  .scheda--invito {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+    background: var(--verde-chiaro);
+    border-radius: var(--raggio);
+  }
+
+  .scheda--invito p {
+    margin-bottom: 1.25rem;
+    color: var(--testo);
+  }
+
+  /* Realizzazioni */
+  .realizzazioni {
+    color: #c3ccc9;
+    background: var(--inchiostro);
+  }
+
+  .realizzazioni h2,
+  .realizzazioni h3 {
+    color: #fff;
+  }
+
+  .realizzazioni .occhiello,
+  .realizzazioni .freccia {
+    color: #8fd3be;
+  }
+
+  .realizzazioni__griglia {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.75rem;
+  }
+
+  .realizzazioni a {
+    display: block;
+    height: 100%;
+    overflow: hidden;
+    text-decoration: none;
+    background: rgb(255 255 255 / 0.05);
+    border-radius: var(--raggio);
+    transition: background-color 0.2s;
+  }
+
+  .realizzazioni a:hover {
+    background: rgb(255 255 255 / 0.09);
+  }
+
+  .realizzazioni img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .realizzazioni__testo {
+    padding: 1.5rem;
+  }
+
+  .realizzazioni__luogo {
+    margin-bottom: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ocra);
+  }
+
+  .realizzazioni__testo p:last-child {
+    margin: 0.6rem 0 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  /* Prima e dopo */
+  .primadopo {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+  }
+
+  .primadopo h2 {
+    margin-bottom: 1.25rem;
+  }
+
+  .primadopo__coppia {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  figure {
+    position: relative;
+    margin: 0;
+  }
+
+  figure img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--raggio);
+  }
+
+  figcaption {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--inchiostro);
+    background: var(--carta);
+    border-radius: 999px;
+  }
+
+  .primadopo__dopo {
+    color: #fff;
+    background: var(--verde);
+  }
+
+  /* Contatti */
+  .contatti {
+    padding-block: clamp(3.5rem, 7vw, 5.5rem);
+    color: #d8ebe4;
+    background: var(--verde-scuro);
+  }
+
+  .contatti__griglia {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+  }
+
+  .contatti h2 {
+    color: #fff;
+  }
+
+  .contatti .occhiello {
+    color: #8fd3be;
+  }
+
+  .contatti__azioni {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .bottone--trasparente {
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.45);
+  }
+
+  .bottone--trasparente:hover {
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px #fff;
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 0;
+  }
+
+  dt {
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8fd3be;
+  }
+
+  dd {
+    margin: 0;
+  }
+
+  dd a {
+    color: #fff;
+  }
+
+  @media (max-width: 900px) {
+    .eroe__griglia,
+    .azienda,
+    .primadopo,
+    .contatti__griglia {
+      grid-template-columns: 1fr;
+    }
+
+    .numeri__griglia {
+      grid-template-columns: 1fr;
+    }
+
+    .numeri li + li {
+      border-top: 1px solid var(--linea);
+      border-left: 0;
+    }
+
+    .numeri a,
+    .numeri li:first-child a {
+      padding-inline: 0;
+    }
+  }
+</style>

@@ -1,0 +1,110 @@
+---
+import { Image } from 'astro:assets';
+import { azienda, menu } from '../data/sito';
+import { foto } from '../lib/foto';
+
+const qui = Astro.url.pathname;
+---
+
+<header class="testata">
+  <div class="contenitore testata__riga">
+    <a href="/" class="testata__logo" aria-label={`${azienda.nome}, pagina iniziale`}>
+      <Image src={foto('2016/09/logo.png')} alt={azienda.nome} loading="eager" />
+    </a>
+    <nav class="testata__menu" aria-label="Menu principale">
+      <ul role="list">
+        {
+          menu.map((voce) => (
+            <li>
+              <a href={voce.href} aria-current={qui.startsWith(voce.href) ? 'page' : undefined}>
+                {voce.titolo}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <a class="bottone testata__telefono" href={`tel:${azienda.telefonoLink}`}>
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M3 5a2 2 0 0 1 2-2h2.6a1 1 0 0 1 1 .8l.9 4a1 1 0 0 1-.5 1.1L7.2 10a13 13 0 0 0 6.8 6.8l1.1-1.8a1 1 0 0 1 1.1-.5l4 .9a1 1 0 0 1 .8 1V19a2 2 0 0 1-2 2A16 16 0 0 1 3 5Z"
+        ></path>
+      </svg>
+      {azienda.telefono}
+    </a>
+  </div>
+</header>
+
+<style>
+  .testata {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgb(255 255 255 / 0.94);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .testata__riga {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    min-height: 5rem;
+  }
+
+  .testata__logo img {
+    width: auto;
+    height: 3.5rem;
+  }
+
+  .testata__menu {
+    margin-left: auto;
+  }
+
+  .testata__menu ul {
+    display: flex;
+    gap: clamp(1rem, 2.2vw, 2.2rem);
+  }
+
+  .testata__menu a {
+    position: relative;
+    padding-block: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--inchiostro);
+  }
+
+  .testata__menu a::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 2px;
+    background: var(--verde);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s;
+  }
+
+  .testata__menu a:hover::after,
+  .testata__menu a[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+
+  .testata__telefono {
+    padding: 0.7rem 1.2rem;
+    white-space: nowrap;
+  }
+
+  /* Menu a comparsa per smartphone: previsto nella fase di ottimizzazione mobile. */
+  @media (max-width: 900px) {
+    .testata__menu {
+      display: none;
+    }
+
+    .testata__telefono {
+      margin-left: auto;
+    }
+  }
+</style>
