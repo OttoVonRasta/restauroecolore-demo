@@ -1,5 +1,11 @@
 // Dati aziendali usati in tutto il sito: si correggono qui una volta sola.
 
+import logoBancaSantoStefano from '../assets/clienti/banca-santo-stefano.png';
+import logoEnel from '../assets/clienti/enel.png';
+import logoKiko from '../assets/clienti/kiko-milano.svg';
+import logoRfi from '../assets/clienti/rete-ferroviaria-italiana.svg';
+import logoUnicredit from '../assets/clienti/unicredit.svg';
+
 const ANNO_FONDAZIONE = 1991;
 
 export const azienda = {
@@ -28,7 +34,13 @@ export const filiali = [
   { nome: 'Filiale di Jesolo', indirizzo: 'Via Olanda, 164 - Jesolo VE' },
 ];
 
-export const clienti = ['Rete Ferroviaria Italiana', 'Unicredit', 'Enel', 'KIKO Makeup Milano', 'Banca Santo Stefano'];
+export const clienti = [
+  { nome: 'Rete Ferroviaria Italiana', logo: logoRfi },
+  { nome: 'Unicredit', logo: logoUnicredit },
+  { nome: 'Enel', logo: logoEnel },
+  { nome: 'KIKO Makeup Milano', logo: logoKiko },
+  { nome: 'Banca Santo Stefano', logo: logoBancaSantoStefano },
+];
 
 export const menu = [
   { titolo: 'Azienda', href: '/azienda/' },
