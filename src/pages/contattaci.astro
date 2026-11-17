@@ -1,0 +1,239 @@
+---
+import Base from '../layouts/Base.astro';
+import { azienda, filiali } from '../data/sito';
+
+// Il sito e' statico: per ricevere i messaggi sul server si imposta PUBLIC_FORM_ENDPOINT
+// (es. un indirizzo Formspree). Senza, il modulo apre il programma di posta dell'utente.
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined;
+const azione = endpoint || `mailto:${azienda.email}`;
+const indirizzoCompleto = `${azienda.indirizzo}, ${azienda.localita}`;
+const mappa = `https://www.google.com/maps?q=${encodeURIComponent(indirizzoCompleto)}&output=embed`;
+const mappaLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(indirizzoCompleto)}`;
+---
+
+<Base
+  titolo="Contatti"
+  descrizione="Contatta Restauro & Colore per richieste di informazioni o preventivi: sede a Santa Giustina in Colle (PD) e filiali a Noale, Mestre, Marghera e Jesolo."
+>
+  <header class="apertura">
+    <div class="contenitore">
+      <nav class="briciole" aria-label="Percorso">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Contatti</span>
+      </nav>
+      <p class="occhiello">Preventivi e informazioni</p>
+      <h1>Contattaci</h1>
+      <p class="apertura__testo">
+        Scrivici per richieste di informazioni o preventivi: ti risponderemo il prima possibile.
+      </p>
+    </div>
+  </header>
+
+  <div class="contenitore contatti">
+    <section aria-labelledby="titolo-modulo">
+      <h2 id="titolo-modulo">Scrivici</h2>
+      <form
+        class="modulo"
+        action={azione}
+        method="post"
+        enctype={endpoint ? undefined : 'text/plain'}
+      >
+        <label>
+          Il tuo nome
+          <input type="text" name="nome" autocomplete="name" required />
+        </label>
+        <label>
+          La tua email
+          <input type="email" name="email" autocomplete="email" required />
+        </label>
+        <label>
+          Numero di telefono
+          <input type="tel" name="telefono" autocomplete="tel" />
+        </label>
+        <label>
+          Oggetto
+          <input type="text" name="oggetto" required />
+        </label>
+        <label>
+          Il tuo messaggio <span class="facoltativo">(facoltativo)</span>
+          <textarea name="messaggio" rows="6"></textarea>
+        </label>
+        <p class="esca" aria-hidden="true">
+          <label>Non compilare<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></label>
+        </p>
+        <button type="submit" class="bottone">Invia</button>
+      </form>
+    </section>
+
+    <aside class="recapiti" aria-label="Recapiti">
+      <h2>{azienda.ragioneSociale}</h2>
+      <h3>Sede</h3>
+      <address>
+        {azienda.indirizzo}<br />
+        {azienda.localita}
+      </address>
+      <p>
+        Tel. <a href={`tel:${azienda.telefonoLink}`}>{azienda.telefono}</a><br />
+        Email <a href={`mailto:${azienda.email}`}>{azienda.email}</a>
+      </p>
+
+      {
+        filiali.map((f) => (
+          <>
+            <h3>{f.nome}</h3>
+            <p>
+              {f.indirizzo}
+              {f.telefono && (
+                <>
+                  <br />
+                  Tel. <a href={`tel:+39${f.telefono.replace(/\D/g, '')}`}>{f.telefono}</a>
+                </>
+              )}
+            </p>
+          </>
+        ))
+      }
+    </aside>
+  </div>
+
+  <section class="contenitore mappa" aria-label="Mappa della sede">
+    <iframe
+      title={`Mappa: ${indirizzoCompleto}`}
+      src={mappa}
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      allowfullscreen
+    ></iframe>
+    <p><a href={mappaLink} rel="noopener">Apri la mappa in una nuova finestra</a></p>
+  </section>
+</Base>
+
+<style>
+  .apertura {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(2rem, 4vw, 3rem);
+  }
+
+  .briciole {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+    font-size: 0.9rem;
+    color: var(--tenue);
+  }
+
+  .briciole a {
+    text-decoration: none;
+  }
+
+  .briciole a:hover {
+    color: var(--verde);
+    text-decoration: underline;
+  }
+
+  .apertura__testo {
+    max-width: 38rem;
+    margin: 1.25rem 0 0;
+    font-size: 1.2rem;
+  }
+
+  .contatti {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    padding-bottom: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .modulo {
+    display: grid;
+    gap: 1.1rem;
+  }
+
+  .modulo label {
+    display: grid;
+    gap: 0.4rem;
+    font-weight: 600;
+    color: var(--inchiostro);
+  }
+
+  .facoltativo {
+    font-weight: 400;
+    color: var(--tenue);
+  }
+
+  .modulo input,
+  .modulo textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font: inherit;
+    font-weight: 400;
+    color: var(--inchiostro);
+    background: var(--carta);
+    border: 1px solid var(--linea);
+    border-radius: 10px;
+  }
+
+  .modulo input:focus,
+  .modulo textarea:focus {
+    outline: 2px solid var(--verde);
+    outline-offset: 1px;
+    border-color: var(--verde);
+  }
+
+  .modulo .bottone {
+    justify-self: start;
+    cursor: pointer;
+  }
+
+  .esca {
+    position: absolute;
+    left: -9999px;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .recapiti {
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    background: var(--intonaco);
+    border-radius: var(--raggio);
+    align-self: start;
+  }
+
+  .recapiti h2 {
+    margin-top: 0;
+  }
+
+  .recapiti h3 {
+    margin: 1.5rem 0 0.25rem;
+    font-size: 1.05rem;
+  }
+
+  .recapiti p,
+  .recapiti address {
+    margin: 0;
+    font-style: normal;
+  }
+
+  .mappa {
+    padding-bottom: clamp(4rem, 9vw, 7.5rem);
+  }
+
+  .mappa iframe {
+    display: block;
+    width: 100%;
+    height: clamp(18rem, 40vw, 26rem);
+    border: 0;
+    border-radius: var(--raggio);
+  }
+
+  .mappa p {
+    margin: 0.75rem 0 0;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 800px) {
+    .contatti {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
