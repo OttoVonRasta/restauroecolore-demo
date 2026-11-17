@@ -1,0 +1,227 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { azienda } from '../data/sito';
+import { confronti } from '../data/confronti';
+import { foto } from '../lib/foto';
+
+const LARGHEZZE = [480, 800, 1200];
+const MISURE = '(max-width: 560px) 100vw, (max-width: 1248px) 50vw, 600px';
+---
+
+<Base
+  titolo="Prima e Dopo"
+  descrizione="Alcuni esempi delle lavorazioni eseguite da Restauro & Colore, con il confronto della situazione prima e dopo l’intervento."
+>
+  <header class="apertura">
+    <div class="contenitore">
+      <nav class="briciole" aria-label="Percorso">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Prima e Dopo</span>
+      </nav>
+      <p class="occhiello">{confronti.length} interventi a confronto</p>
+      <h1>Prima &amp; Dopo</h1>
+      <p class="apertura__testo">
+        Alcuni esempi delle lavorazioni eseguite, con il confronto della situazione prima e dopo l’intervento.
+      </p>
+    </div>
+  </header>
+
+  <div class="contenitore confronti">
+    {
+      confronti.map((c, i) => (
+        <article class="confronto">
+          <div class="confronto__foto">
+            <figure>
+              <Image
+                src={foto(c.prima)}
+                alt={`Prima dell’intervento: ${c.lavori}`}
+                widths={LARGHEZZE}
+                sizes={MISURE}
+                loading={i === 0 ? 'eager' : 'lazy'}
+              />
+              <figcaption>Prima</figcaption>
+            </figure>
+            <figure>
+              <Image
+                src={foto(c.dopo)}
+                alt={`Dopo l’intervento: ${c.lavori}`}
+                widths={LARGHEZZE}
+                sizes={MISURE}
+                loading={i === 0 ? 'eager' : 'lazy'}
+              />
+              <figcaption class="confronto__dopo">Dopo</figcaption>
+            </figure>
+          </div>
+          <div class="confronto__testo">
+            <p class="confronto__numero" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </p>
+            <div>
+              <p class="confronto__etichetta">Lavori eseguiti</p>
+              <h2>{c.lavori}</h2>
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <section class="invito">
+    <div class="contenitore invito__riga">
+      <h2>Vuoi ricevere maggiori informazioni o richiedere un preventivo?</h2>
+      <div class="invito__azioni">
+        <a class="bottone bottone--chiaro" href="/contattaci/">Contattaci</a>
+        <a class="invito__telefono" href={`tel:${azienda.telefonoLink}`}>oppure chiama {azienda.telefono}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Apertura */
+  .apertura {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .briciole {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+    font-size: 0.9rem;
+    color: var(--tenue);
+  }
+
+  .briciole a {
+    text-decoration: none;
+  }
+
+  .briciole a:hover {
+    color: var(--verde);
+    text-decoration: underline;
+  }
+
+  .apertura__testo {
+    max-width: 38rem;
+    margin: 1.25rem 0 0;
+    font-size: 1.2rem;
+  }
+
+  /* Confronti */
+  .confronti {
+    display: grid;
+    gap: clamp(3.5rem, 7vw, 5.5rem);
+    padding-bottom: clamp(4rem, 9vw, 7.5rem);
+  }
+
+  .confronto__foto {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  figure {
+    position: relative;
+    margin: 0;
+  }
+
+  figure img {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border-radius: var(--raggio);
+  }
+
+  figcaption {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--inchiostro);
+    background: var(--carta);
+    border-radius: 999px;
+  }
+
+  .confronto__dopo {
+    color: #fff;
+    background: var(--verde);
+  }
+
+  .confronto__testo {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .confronto__numero {
+    margin: 0;
+    font-family: var(--titoli);
+    font-size: 2.6rem;
+    line-height: 1;
+    color: var(--ocra);
+  }
+
+  .confronto__etichetta {
+    margin: 0 0 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tenue);
+  }
+
+  .confronto h2 {
+    max-width: 54rem;
+    font-size: 1.35rem;
+    line-height: 1.35;
+    letter-spacing: 0;
+    text-wrap: pretty;
+  }
+
+  /* Invito */
+  .invito {
+    padding-block: clamp(3.5rem, 7vw, 5.5rem);
+    background: var(--verde-scuro);
+  }
+
+  .invito__riga {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem 3rem;
+  }
+
+  .invito h2 {
+    max-width: 36rem;
+    font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+    color: #fff;
+  }
+
+  .invito__azioni {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+  }
+
+  .invito__telefono {
+    color: #d8ebe4;
+    text-underline-offset: 0.2em;
+  }
+
+  .invito__telefono:hover {
+    color: #fff;
+  }
+
+  @media (max-width: 560px) {
+    .confronto__foto {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
