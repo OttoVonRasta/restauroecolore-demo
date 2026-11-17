@@ -11,7 +11,7 @@ const qui = Astro.url.pathname;
     <a href="/" class="testata__logo" aria-label={`${azienda.nome}, pagina iniziale`}>
       <Image src={foto('2016/09/logo.png')} alt={azienda.nome} loading="eager" />
     </a>
-    <nav class="testata__menu" aria-label="Menu principale">
+    <nav class="testata__menu" id="menu-principale" aria-label="Menu principale">
       <ul role="list">
         {
           menu.map((voce) => (
@@ -34,8 +34,30 @@ const qui = Astro.url.pathname;
       </svg>
       {azienda.telefono}
     </a>
+    <button
+      type="button"
+      class="testata__toggle"
+      aria-label="Apri il menu"
+      aria-expanded="false"
+      aria-controls="menu-principale"
+    >
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+
+<script>
+  const testata = document.querySelector<HTMLElement>('.testata');
+  const toggle = document.querySelector<HTMLButtonElement>('.testata__toggle');
+  const imposta = (aperto: boolean) => {
+    testata?.classList.toggle('testata--aperta', aperto);
+    toggle?.setAttribute('aria-expanded', String(aperto));
+    toggle?.setAttribute('aria-label', aperto ? 'Chiudi il menu' : 'Apri il menu');
+  };
+  toggle?.addEventListener('click', () => imposta(!testata?.classList.contains('testata--aperta')));
+  document.querySelectorAll('#menu-principale a').forEach((a) => a.addEventListener('click', () => imposta(false)));
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && imposta(false));
+</script>
 
 <style>
   .testata {
@@ -97,14 +119,90 @@ const qui = Astro.url.pathname;
     white-space: nowrap;
   }
 
-  /* Menu a comparsa per smartphone: previsto nella fase di ottimizzazione mobile. */
+  .testata__toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0.6rem;
+    border: 1px solid var(--linea);
+    border-radius: 0.5rem;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .testata__toggle span {
+    display: block;
+    height: 2px;
+    background: var(--inchiostro);
+    transition: transform 0.2s, opacity 0.2s;
+  }
+
+  .testata--aperta .testata__toggle span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .testata--aperta .testata__toggle span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .testata--aperta .testata__toggle span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
   @media (max-width: 900px) {
-    .testata__menu {
-      display: none;
+    .testata__riga {
+      gap: 0.75rem;
+    }
+
+    .testata__toggle {
+      display: flex;
     }
 
     .testata__telefono {
       margin-left: auto;
+    }
+
+    .testata__menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      margin: 0;
+      padding: 0.5rem 1.25rem 1rem;
+      background: #fff;
+      border-bottom: 1px solid var(--linea);
+      box-shadow: 0 12px 24px rgb(0 0 0 / 0.08);
+    }
+
+    .testata--aperta .testata__menu {
+      display: block;
+    }
+
+    .testata__menu ul {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .testata__menu a {
+      display: block;
+      padding-block: 0.9rem;
+      border-bottom: 1px solid var(--linea);
+    }
+
+    .testata__menu a::after {
+      display: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .testata__telefono {
+      padding: 0.7rem;
+      font-size: 0;
+      gap: 0;
     }
   }
 </style>
