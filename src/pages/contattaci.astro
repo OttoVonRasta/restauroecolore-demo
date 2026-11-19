@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
+import { foto } from '../lib/foto';
 import { azienda, filiali } from '../data/sito';
 
 // Il sito e' statico: per ricevere i messaggi sul server si imposta PUBLIC_FORM_ENDPOINT
@@ -49,15 +51,15 @@ const mappaLink = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
         </label>
         <label>
           Numero di telefono
-          <input type="tel" name="telefono" autocomplete="tel" />
+          <input type="tel" name="telefono" autocomplete="tel" required />
         </label>
         <label>
           Oggetto
           <input type="text" name="oggetto" required />
         </label>
         <label>
-          Il tuo messaggio <span class="facoltativo">(facoltativo)</span>
-          <textarea name="messaggio" rows="6"></textarea>
+          Il tuo messaggio
+          <textarea name="messaggio" rows="6" required></textarea>
         </label>
         <p class="esca" aria-hidden="true">
           <label>Non compilare<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></label>
@@ -67,7 +69,9 @@ const mappaLink = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
     </section>
 
     <aside class="recapiti" aria-label="Recapiti">
-      <h2>{azienda.ragioneSociale}</h2>
+      <h2 class="recapiti__logo">
+        <Image src={foto('2016/09/logo.png')} alt={azienda.ragioneSociale} />
+      </h2>
       <h3>Sede</h3>
       <address>
         {azienda.indirizzo}<br />
@@ -156,11 +160,6 @@ const mappaLink = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
     color: var(--inchiostro);
   }
 
-  .facoltativo {
-    font-weight: 400;
-    color: var(--tenue);
-  }
-
   .modulo input,
   .modulo textarea {
     width: 100%;
@@ -199,8 +198,16 @@ const mappaLink = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
     align-self: start;
   }
 
-  .recapiti h2 {
-    margin-top: 0;
+  .recapiti__logo {
+    margin: 0;
+    text-align: center;
+  }
+
+  .recapiti__logo img {
+    width: auto;
+    height: clamp(6rem, 12vw, 8.5rem);
+    max-width: 100%;
+    object-fit: contain;
   }
 
   .recapiti h3 {
